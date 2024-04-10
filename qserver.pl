@@ -117,7 +117,7 @@ my_extract_data(Data, Result):-
 
         %  myitem(InstaSign - key problem,json([date=2024-03-27,is_recurring= @(false),lang=en,string=Mar 27,timezone= @(null)]),4)
         ,findTopTask(CalculateList,0,'',FinalTask)
-        ,FinalTask= myitem(CONTENT1,json([date=_DUE,_,_,string=DateString,_]),4)
+        ,FinalTask= myitem(CONTENT1,json([date=_DUE,_,_,string=DateString,_]),_)
 %        , write('Most import task is: '), write(CONTENT1), write(',
 %        Due: '), write(DateString),nl
 
@@ -127,7 +127,7 @@ my_extract_data(Data, Result):-
 
         ,findTopTask(NextList,0,'',NextTask)
       %  %, write('Next most import task is: '), write(NextTask),nl
-        ,NextTask= myitem(CONTENT2,json([date=_DUE2,_,_,string=DateString2,_]),4)
+        ,NextTask= myitem(CONTENT2,json([date=_DUE2,_,_,string=DateString2,_]),_)
        % , write('Next most import task is: '), write(CONTENT2), write(', Due: '), write(DateString2),nl
 
 
