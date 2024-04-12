@@ -289,6 +289,19 @@ init_todoistkey:-
 
 :-init_todoistkey.
 
+
+dotest(Out):-
+
+
+   ensure_loaded(mytestjson)
+
+   ,mytestjson(TestMe)
+
+   ,checkT(TestMe,Out)
+
+
+   .
+
 %
 %:-
 %cd('P:/AllCode/prolog/queryserver').
