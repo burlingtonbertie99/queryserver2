@@ -271,8 +271,27 @@ checkT(T,ITEMS):-
 
 )
 
+    ; (
+
+                T = json(ItemsHereSomewhere)
+                ,checkTT(ItemsHereSomewhere,ITEMS)
+
+
+            )
+
 
 .
+
+
+checkTT([items=ITEMS|_],ITEMS):-!.
+checkTT([_|ItemsHereSomewhere],ITEMS)   :-
+
+   checkTT(ItemsHereSomewhere,ITEMS)
+
+
+
+
+   .
 
 
 

@@ -271,8 +271,25 @@ checkT(T,ITEMS):-
 
 )
 
+    ; (
+
+                T = json(ItemsHereSomewhere)
+                ,checkTT(ItemsHereSomewhere,ITEMS)
+
+
+            )
+
 
 .
+
+
+
+checkTT([items=ITEMS|ItemsHereSomewhere],ITEMS)   :-
+
+   checkTT(ItemsHereSomewhere,ITEMS)
+
+
+   .
 
 
 
@@ -288,6 +305,19 @@ init_todoistkey:-
 
 
 :-init_todoistkey.
+
+
+dotest(Out):-
+
+
+   ensure_loaded(mytestjson)
+
+   ,mytestjson(TestMe)
+
+   ,checkT(TestMe,Out)
+
+
+   .
 
 %
 %:-
