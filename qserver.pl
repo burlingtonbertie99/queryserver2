@@ -325,6 +325,60 @@ dotest(Out):-
 %:-
 %cd('P:/AllCode/prolog/queryserver').
 
+%client(X):-
+
+
+completion(Prompt, _Model,  Response) :-
+
+   /*
+   base(_Base)
+    , req_headers(Headers),
+    api_version(_V),
+
+    */
+    URL = 'http://localhost:9997/handle',
+    Data = json([prompt=Prompt]),
+    %atom_json_term('a', Data, []),
+    http_open(URL, Out, [method(post)
+                         | _Headers]),
+    json_write(Out, Data),
+    close(Out),
+    http_read_data(Response,_,[json_object(dict)])
+
+
+
+   .
+
+
+
+
+doreq(Reply):-
+
+
+
+http_post([ protocol(http),
+/*            host(Host),
+            port(Port),
+            path(ActionPath)
+
+
+            */
+
+            host('localhost'),
+            port(9997),
+            path(handle)
+
+          ],
+%          form_data([ repository = Repository, dataFormat = DataFormat,
+%          baseURI = BaseURI, verifyData = Verify, data = file(File)]),
+          Reply,
+          [])
+
+
+
+   .
+
+
 server(Port) :-
 http_server(http_dispatch, [port(Port)]).
 
@@ -342,23 +396,22 @@ handle_rpc(Request) :-
 
      .
 
-evaluate(PrologIn, PrologOut) :-
+evaluate(_PrologIn, PrologOut) :-
 
  % init_todoistkey,
 
 
 
-    (
 
-    %PrologIn = json([jsonrpc=Version, params=[Query], id=Id, method=_MethodName])
 
+    %PrologIn = json([jsonrpc=Version, params=[Query], id=Id, method=_MethodName
     %;
 
     % Query = ['f1(R), f2(S)']
-    PrologIn= json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])
+    %PrologIn= json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])
 
-    )
-    ,
+
+    %,
 %     nl,write(Query),nl,
     % MethodName = eval
 
@@ -373,7 +426,53 @@ evaluate(PrologIn, PrologOut) :-
     call(getTasks(_,Term))
 
     ,format(atom(StringResult), "~q", [Term]),
-     PrologOut = json([jsonrpc=Version, result=StringResult, id=Id])
+     PrologOut = json([jsonrpc=1, result=StringResult, id=1])
 
 
      .
+
+
+
+%evaluate(_PrologIn,  json([jsonrpc=1, result="service ready", id=1])).
+
+
+
+myclientX :-
+
+
+   %json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])
+
+   Data = json([id=1,method=post,params='f(1),f(2)',jsonrpc=1])
+   ,http_get('http://localhost:9997/handle',
+             Reply,
+             [ post(Data),
+               json_object(dict),
+               value_string_as(atom)
+             ]),
+    print_term(Reply, []).
+
+
+myclient:-
+
+
+   %json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])
+
+   %TheData = json([id=1,method=post,params=any,jsonrpc=1])
+   TheData = json(anything)
+   ,
+   http_get('http://localhost:9997/handle',
+             Reply,
+            [ post(TheData),
+               json_object(dict),
+               value_string_as(atom)
+             ]),
+    print_term(Reply, []).
+
+
+
+
+
+
+
+
+

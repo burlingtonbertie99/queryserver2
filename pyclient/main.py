@@ -18,9 +18,9 @@ def myExecute():
     #print
     #subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True, stdout=subprocess.PIPE).stdout.read()
 
-    #subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True)
+    subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True)
 
-    #time.sleep(3)  # Sleep for 3 seconds
+    time.sleep(3)  # Sleep for 3 seconds
 
     server = jsonrpclib.Server('http://localhost:9997/handle')
 
