@@ -7,20 +7,19 @@ import subprocess
 import time
 
 
-
 def myExecute():
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, executing prolog and query')  # Press Ctrl+F8 to toggle the breakpoint.
 
-    #subprocess.run(["ls", "-l"])
-    #subprocess.run(["swipl", "-s qserver.pl -g 'server(9997)'"])
+    # subprocess.run(["ls", "-l"])
+    # subprocess.run(["swipl", "-s qserver.pl -g 'server(9997)'"])
 
-    #print
-    #subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True, stdout=subprocess.PIPE).stdout.read()
+    # print
+    # subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True, stdout=subprocess.PIPE).stdout.read()
 
-    subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True)
+    # subprocess.Popen("swipl -s qserver.pl -g server(9997)", shell=True)
 
-    time.sleep(3)  # Sleep for 3 seconds
+    #   time.sleep(3)  # Sleep for 3 seconds
 
     server = jsonrpclib.Server('http://localhost:9997/handle')
 
