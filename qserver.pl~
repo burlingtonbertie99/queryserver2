@@ -400,9 +400,19 @@ handle_rpc(Request) :-
 
     %http_read_json(Request, JSONIn),
      json_to_prolog(JSONIn, PrologIn),
-     evaluate(PrologIn, PrologOut), % application body
+
+     catch(
+     (   evaluate(PrologIn, PrologOut), % application body
      PrologOut = JSONOut,
-     reply_json(JSONOut)
+     reply_json(JSONOut))
+
+         ,_Error,
+
+         ( reply_json('Error 500' )  )
+
+     )
+
+
 
      .
 
