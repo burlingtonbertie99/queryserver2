@@ -377,6 +377,18 @@ http_post([ protocol(http),
 
 
    .
+   
+go:-
+   
+   server(9997),
+   
+   
+   sleep(3),
+   myclient
+   ,sleep(3)
+   
+   
+   .
 
 
 server(Port) :-
@@ -437,7 +449,7 @@ evaluate(_PrologIn, PrologOut) :-
 
 
 
-myclient :-
+myclientX :-
 
 
    %json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])

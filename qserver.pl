@@ -53,8 +53,6 @@ f2(6).
 
 getTasks(false,Message):-
 
-
-
    current_prolog_flag(todoistkey,Key),
 
    %atom_json_term(D,json([model = Model, messages = [json([role = user, content = Prompt])] | Options]),[]),
@@ -374,6 +372,18 @@ http_post([ protocol(http),
           Reply,
           [])
 
+
+
+   .
+
+go:-
+
+   server(9997),
+
+
+   sleep(3),
+   myclient
+   ,sleep(3)
 
 
    .
