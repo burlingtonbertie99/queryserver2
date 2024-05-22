@@ -420,7 +420,7 @@ handle_rpc(Request) :-
 
 
 
-   (   http_read_json(Request, _JSONIn,[]);reply_json('Non-empty request' )
+   (   http_read_json(Request, _JSONIn,[]),reply_json('Non-empty request' )
 
    ;
 
