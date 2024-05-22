@@ -32,7 +32,19 @@
 today_is(0).
 
 
+dograph:-
+%  cd  "C:\Users\slaph\src\queryserver2"
+%  export PATH=$PATH:"C:\Program Files\Graphviz\bin"
+%  "C:\Program Files\swipl\bin\swipl.exe"
+%   [qserver].
+%   qserver:dograph.
+%   halt.
+% cp 'qserver.pdf' newqserver.pdf
 
+	use_module(library(callgraph))
+	,module_dotpdf(qserver,[method(unflatten([fl(4),c(4)]))])
+
+.
 
 :- http_handler(root(handle), handle_rpc, []).
 
