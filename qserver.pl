@@ -307,7 +307,7 @@ init_todoistkey:-
 
 
 :-init_todoistkey.
-
+/*
 
 dotest(Out):-
 
@@ -320,6 +320,8 @@ dotest(Out):-
 
 
    .
+
+*/
 
 %
 %:-
@@ -398,40 +400,75 @@ server(Port) :-
 
 handle_rpc(Request) :-
 
-    % http_log(Request,[]),
-    % http_log(JSONIn,[]),
-    http_read_json(Request, _JSONIn,[]),
-
-    %http_read_json(Request, JSONIn),
-     %json_to_prolog(JSONIn, PrologIn),
-
-     catch(
-     (
+/*
+   catch(
+       (
 
 
-
-         %evaluate(PrologIn, PrologOut), % application body
-
-
-    call(getTasks(_,Term))
-
-    ,format(atom(StringResult), "~q", [Term]),
-     JSONOut = json([jsonrpc=1, result=StringResult, id=1])
+       http_read_json(Request, _JSONIn,[])
 
 
-         %,PrologOut = JSONOut,
-         ,reply_json(JSONOut))
+   )
 
-         ,_Error,
+        ,_Error1,
 
-         ( reply_json('Error 500' )  )
+       ( reply_json('Empty request?' )  )
 
-     )
+   )
+
+   */
 
 
 
-     .
+   (   http_read_json(Request, _JSONIn,[]);reply_json('Non-empty request' )
 
+   ;
+
+   ( reply_json('Empty request?' )  )
+
+
+   )
+
+
+
+
+
+
+/*
+
+   ,
+
+
+   catch(
+       (
+
+
+       call(getTasks(_,Term))
+
+       ,format(atom(StringResult), "~q", [Term]),
+       JSONOut = json([jsonrpc=1, result=StringResult, id=1])
+
+
+       ,reply_json(JSONOut))
+
+        ,_Error2,
+
+       ( reply_json('Error 500' )
+       )
+
+   )
+
+   */
+
+
+
+   .
+
+
+
+
+
+/*
 evaluate(_PrologIn, PrologOut) :-
 
  % init_todoistkey,
@@ -466,7 +503,7 @@ evaluate(_PrologIn, PrologOut) :-
 
 
      .
-
+*/
 
 
 %evaluate(_PrologIn,  json([jsonrpc=1, result="service ready", id=1])).
