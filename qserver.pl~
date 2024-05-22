@@ -1,3 +1,6 @@
+:-module(qserver,[getTasks/2]).
+
+
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -19,6 +22,9 @@
 
 :-ensure_loaded(date_time).
 
+
+
+
 :-dynamic today_is/1.
 
 
@@ -39,13 +45,7 @@ http_json:json_type('application/json-rpc').
 %http_json:json_type('text/xml').
 
 % sample prolog program
-f1(1).
-f1(2).
-f1(4).
-f1(5).
-f2(3).
-f2(4).
-f2(6).
+f1(1).f1(2).f1(4).f1(5).f2(3).f2(4).f2(6).
 
 
 % getTasks(Result):- gpt_completions(Model, Prompt, Result, false,
@@ -328,7 +328,7 @@ dotest(Out):-
 
 completion(Prompt, _Model,  Response) :-
 
-   /*
+/*
    base(_Base)
     , req_headers(Headers),
     api_version(_V),
@@ -348,7 +348,7 @@ completion(Prompt, _Model,  Response) :-
    .
 
 
-
+/*
 
 doreq(Reply):-
 
@@ -376,13 +376,15 @@ http_post([ protocol(http),
 
    .
 
+*/
+
 go:-
 
    server(9997),
 
 
    sleep(3),
-   myclient
+   invoke_handler
    ,sleep(3)
 
 
@@ -390,21 +392,33 @@ go:-
 
 
 server(Port) :-
-http_server(http_dispatch, [port(Port)]).
+   http_server(http_dispatch, [port(Port)]).
 
 handle_rpc(Request) :-
 
     % http_log(Request,[]),
     % http_log(JSONIn,[]),
-    http_read_json(Request, JSONIn,[]),
+    http_read_json(Request, _JSONIn,[]),
 
     %http_read_json(Request, JSONIn),
-     json_to_prolog(JSONIn, PrologIn),
+     %json_to_prolog(JSONIn, PrologIn),
 
      catch(
-     (   evaluate(PrologIn, PrologOut), % application body
-     PrologOut = JSONOut,
-     reply_json(JSONOut))
+     (
+
+
+
+         %evaluate(PrologIn, PrologOut), % application body
+
+
+    call(getTasks(_,Term))
+
+    ,format(atom(StringResult), "~q", [Term]),
+     JSONOut = json([jsonrpc=1, result=StringResult, id=1])
+
+
+         %,PrologOut = JSONOut,
+         ,reply_json(JSONOut))
 
          ,_Error,
 
@@ -455,7 +469,7 @@ evaluate(_PrologIn, PrologOut) :-
 
 %evaluate(_PrologIn,  json([jsonrpc=1, result="service ready", id=1])).
 
-
+/*
 
 myclientX :-
 
@@ -472,7 +486,9 @@ myclientX :-
     print_term(Reply, []).
 
 
-myclient:-
+*/
+
+invoke_handler:-
 
 
    %json([id=Id,method=_MethodName,params=_Query,jsonrpc=Version])
