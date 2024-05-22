@@ -420,8 +420,39 @@ handle_rpc(Request) :-
 
 
 
-   (   http_read_json(Request, _JSONIn,[]);reply_json('Non-empty request' )
+   (
 
+       (
+       http_read_json(Request, _JSONIn,[])
+
+%       ,reply_json('Non-empty request' )
+%
+%
+
+       ,
+
+
+   catch(
+       (
+
+
+       call(getTasks(_,Term))
+
+       ,format(atom(StringResult), "~q", [Term]),
+       JSONOut = json([jsonrpc=1, result=StringResult, id=1])
+
+
+       ,reply_json(JSONOut))
+
+        ,_Error2,
+
+       ( reply_json('Error 500' )
+       )
+
+   )
+
+
+   )
    ;
 
    ( reply_json('Empty request?' )  )

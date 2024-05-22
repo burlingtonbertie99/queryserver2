@@ -96,48 +96,42 @@ getTasks(false,Message):-
 
 my_extract_data(Data, Result):-
 
-  /*
-   %member(Group=Fieldlist, Data),
-   gpt_extract_fields(Fieldname, Fieldlist, Result)
-
-   */
-
-
-	%json(Data)
-	%nl,write('DATA is ...................'),nl,
-
-	%nl,write(Data),nl,
 
 	checkT(Data,ITEMS)
-
 
 	,myfilter(ITEMS,[],CalculateList)
 
 
-
-        %  myitem(InstaSign - key problem,json([date=2024-03-27,is_recurring= @(false),lang=en,string=Mar 27,timezone= @(null)]),4)
         ,findTopTask(CalculateList,0,'',FinalTask)
         ,FinalTask= myitem(CONTENT1,json([date=_DUE,_,_,string=DateString,_]),_)
-%        , write('Most import task is: '), write(CONTENT1), write(',
-%        Due: '), write(DateString),nl
-
 
         ,select(FinalTask,CalculateList,NextList),!
 
 
-        ,findTopTask(NextList,0,'',NextTask)
-      %  %, write('Next most import task is: '), write(NextTask),nl
+        ,atomic_list_concat([CONTENT1, ' Date due: ',DateString], ', ', Content1)
+
+        ,
+        (
+        (
+
+             % if there is a NextTasks- get top again or just take first answer
+             findTopTask(NextList,0,'',NextTask)
+
         ,NextTask= myitem(CONTENT2,json([date=_DUE2,_,_,string=DateString2,_]),_)
-       % , write('Next most import task is: '), write(CONTENT2), write(', Due: '), write(DateString2),nl
+
+        ,atomic_list_concat([Content1,CONTENT2, ' Date due: ',DateString2], ', ', Result)
+         )
+        ;
+
+             (
+
+            Result= Content1
+
+        )
 
 
 
-%       ,atom_concat(CONTENT1,DateString,Result0)
- %      ,atom_concat(CONTENT2,Result0,Result1)
-  %     ,atom_concat(DateString2,Result1,Result)
-
-  ,atomic_list_concat([CONTENT1, ' Date due: ',DateString,CONTENT2, ' Date due: ',DateString2], ', ', Result)
-
+        )
 
    .
 
@@ -420,8 +414,39 @@ handle_rpc(Request) :-
 
 
 
-   (   http_read_json(Request, _JSONIn,[]),reply_json('Non-empty request' )
+   (
 
+       (
+       http_read_json(Request, _JSONIn,[])
+
+%       ,reply_json('Non-empty request' )
+%
+%
+
+       ,
+
+
+   catch(
+       (
+
+
+       call(getTasks(_,Term))
+
+       ,format(atom(StringResult), "~q", [Term]),
+       JSONOut = json([jsonrpc=1, result=StringResult, id=1])
+
+
+       ,reply_json(JSONOut))
+
+        ,_Error2,
+
+       ( reply_json('Error 500' )
+       )
+
+   )
+
+
+   )
    ;
 
    ( reply_json('Empty request?' )  )
